@@ -1,5 +1,5 @@
 """
-ClaudEdits FCP XML Validator
+YapCut FCP XML Validator
 
 Validates generated FCP 7 XML (xmeml v5) before importing into Premiere Pro.
 Checks well-formedness, required elements, and structural integrity.

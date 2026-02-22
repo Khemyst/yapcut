@@ -4,7 +4,7 @@ from urllib.parse import quote
 
 TRANSCRIPT_PATH = r"C:\Users\jaywa.NEUTRON\Documents\heyJayWalker\Streams\Battlefield\BATTLEFIELD 6 VOICE ACTOR REACTS TO HIS OWN CHARACTER _ PART THREE.json"
 SOURCE_PATH = "C:/Users/jaywa.NEUTRON/Documents/heyJayWalker/Streams/Battlefield/BATTLEFIELD 6 VOICE ACTOR REACTS TO HIS OWN CHARACTER _ PART THREE.mp4"
-OUTPUT_PATH = r"C:\Users\jaywa.NEUTRON\Projects\claudedits\output\bf6_part3_rough_cut.xml"
+OUTPUT_PATH = r"C:\Users\jaywa.NEUTRON\Projects\yapcut\output\bf6_part3_rough_cut.xml"
 
 TIMEBASE = 30
 NTSC = "FALSE"

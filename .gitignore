@@ -1,2 +1,5 @@
 output/
-transcripts/
+input/
+__pycache__/
+*.pyc
+.env
