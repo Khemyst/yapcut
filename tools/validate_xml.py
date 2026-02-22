@@ -2,15 +2,23 @@
 YapCut FCP XML Validator
 
 Validates generated FCP 7 XML (xmeml v5) before importing into Premiere Pro.
-Checks well-formedness, required elements, and structural integrity.
+Supports both v1 rough-cut mode (clipitems with start/end/in/out, file
+references, timeline continuity) and v2 marker mode (spanned markers on
+clipitems with valid prefixes and frame ranges).
+
+Checks: XML well-formedness, required elements, structural integrity,
+timeline continuity, file references, and marker validity.
 
 Usage:
     python validate_xml.py <path_to_xml>
 """
 
+import re
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+VALID_MARKER_PREFIXES = {"[KEEP]", "[MAYBE]", "[CUT]", "[MOMENT]", "[CONTEXT]"}
 
 
 def validate(filepath: str) -> list[str]:
@@ -82,6 +90,7 @@ def validate(filepath: str) -> list[str]:
                         issues.append(f"{prefix}: video track {ti + 1} has no <clipitem>")
                     for ci, clip in enumerate(clipitems):
                         _validate_clipitem(clip, f"{prefix} video track {ti + 1} clip {ci + 1}", issues)
+                        _validate_markers(clip, f"{prefix} video track {ti + 1} clip {ci + 1}", issues)
 
                 # Check timeline continuity on first video track
                 _check_continuity(tracks[0], f"{prefix} video track 1", issues)
@@ -148,6 +157,60 @@ def _validate_clipitem(clip: ET.Element, prefix: str, issues: list[str]):
     rate = clip.find("rate")
     if rate is not None and rate.find("timebase") is None:
         issues.append(f"{prefix}: <rate> missing <timebase>")
+
+
+def _validate_markers(clip: ET.Element, prefix: str, issues: list[str]):
+    """Validate all <marker> elements inside a clipitem."""
+    markers = clip.findall("marker")
+    for mi, marker in enumerate(markers):
+        m_prefix = f"{prefix} marker {mi + 1}"
+
+        # Name is required and must start with a valid prefix
+        name_el = marker.find("name")
+        if name_el is None or not (name_el.text or "").strip():
+            issues.append(f"{m_prefix}: missing <name>")
+        else:
+            name_text = name_el.text.strip()
+            # Extract the bracketed prefix, e.g. "[KEEP]" from "[KEEP] Great moment"
+            match = re.match(r"(\[[A-Z]+\])", name_text)
+            if not match:
+                issues.append(
+                    f"{m_prefix}: name '{name_text}' does not start with a "
+                    f"valid prefix — expected one of {sorted(VALID_MARKER_PREFIXES)}"
+                )
+            elif match.group(1) not in VALID_MARKER_PREFIXES:
+                issues.append(
+                    f"{m_prefix}: invalid prefix '{match.group(1)}' — "
+                    f"expected one of {sorted(VALID_MARKER_PREFIXES)}"
+                )
+
+        # Comment is required
+        comment_el = marker.find("comment")
+        if comment_el is None or not (comment_el.text or "").strip():
+            issues.append(f"{m_prefix}: missing <comment> (reasoning required)")
+
+        # in/out frame range is required
+        in_el = marker.find("in")
+        out_el = marker.find("out")
+        has_in = in_el is not None and (in_el.text or "").strip()
+        has_out = out_el is not None and (out_el.text or "").strip()
+
+        if not has_in:
+            issues.append(f"{m_prefix}: missing <in> frame value")
+        if not has_out:
+            issues.append(f"{m_prefix}: missing <out> frame value")
+
+        if has_in and has_out:
+            try:
+                in_val = int(in_el.text.strip())
+                out_val = int(out_el.text.strip())
+                if out_val <= in_val:
+                    issues.append(
+                        f"{m_prefix}: out ({out_val}) <= in ({in_val}) — "
+                        f"out must be greater than in"
+                    )
+            except ValueError:
+                issues.append(f"{m_prefix}: non-integer frame value in <in>/<out>")
 
 
 def _check_continuity(track: ET.Element, prefix: str, issues: list[str]):
