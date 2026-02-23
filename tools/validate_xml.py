@@ -257,6 +257,13 @@ def _check_file_refs(root: ET.Element, issues: list[str]):
 
 
 def main():
+    # Force UTF-8 stdout/stderr on Windows to handle Unicode paths
+    import io, os
+    if sys.platform == "win32":
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+        os.environ.setdefault("PYTHONIOENCODING", "utf-8")
+
     if len(sys.argv) != 2:
         print(f"Usage: python {sys.argv[0]} <path_to_xml>")
         sys.exit(1)

@@ -108,6 +108,13 @@
 
   <div class="log-area" id="logArea"></div>
 
+  <script>
+    window.onerror = function(msg, url, line, col, err) {
+      var el = document.getElementById("logArea");
+      if (el) el.innerHTML += '<div style="color:#f44336">[ERROR] ' + msg + ' (line ' + line + ')</div>';
+      return false;
+    };
+  </script>
   <script src="CSInterface.js"></script>
   <script src="bridge-cep.js"></script>
 </body>

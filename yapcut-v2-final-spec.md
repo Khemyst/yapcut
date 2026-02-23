@@ -373,7 +373,7 @@ First session: `EDITORIAL_MEMORY.md` doesn't exist. YapCut operates on briefing 
 
 | Input | Source | Required |
 |-------|--------|----------|
-| Timecoded transcript JSON | VodCutter Stage 2 (WhisperX) | Yes |
+| Timecoded transcript JSON | `tools/transcribe.py` (WhisperX) | Yes |
 | YouTube chat log JSON | VapoRise post-stream task or `chat_pull.py` | No |
 | Editorial preset .md | Editor-created, in `yapcut/presets/` | No |
 | Editorial memory .md | Auto-generated from diff analysis | No |
@@ -399,7 +399,7 @@ yapcut/
 │   ├── chat_pull.py             # YouTube chat log fetcher
 │   └── diff_analysis.py         # EDL vs. markers comparison engine
 ├── input/
-│   ├── transcript.json          # From VodCutter Stage 2
+│   ├── transcript.json          # From tools/transcribe.py
 │   └── chat.json                # YouTube chat (when available)
 └── output/
     └── yapcut_markers.xml       # Generated marker track (or roughcut.xml)
@@ -412,7 +412,7 @@ yapcut/
 ```
 Stream ends
     │
-    ├─→ VodCutter Stage 1 (amplitude chop) → Stage 2 (WhisperX transcript)
+    ├─→ tools/transcribe.py (WhisperX)
     │                                              │
     ├─→ VapoRise (remux, upload, chat pull)        │
     │         │                                    │
