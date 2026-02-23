@@ -2,10 +2,20 @@
 
 *Placed at the beginning of the final video. The viewer has clicked but hasn't committed. This is the closer — 60–120 seconds of the best material from the entire VOD, structured to make leaving feel wrong.*
 
+## Output Mode: `cuts`
+
+This preset produces **physical edit points**, not markers. Claude selects the best moments and assembles complete teaser sequences, ready to drop at the start of the main edit.
+
+### Output Format
+- **File:** `yapcut_teaser.xml`
+- **Structure:** 2-3 **separate sequences** in one XML file, each a complete teaser option. Premiere imports them all; the editor picks their favorite.
+- **Sequence naming:** `"Teaser A (hype)"`, `"Teaser B (comedy)"`, `"Teaser C (balanced)"` — or whatever tonal angles the VOD supports.
+- **Each sequence:** 6-10 clips assembled as a rough cut. 60-120 seconds total. 90 seconds is optimal. Clips are ordered for maximum impact, NOT chronologically.
+
 ## Target Output
 - Format: Front-loaded video intro (horizontal, same project timeline)
 - Duration: 60–120 seconds. 90 seconds is optimal.
-- Marker Density: Select only — this is a curation pass, not a scan pass. Pull 6–10 TEASER-flagged clips from across the full VOD. Prefer material from the latter half (the viewer hasn't seen it yet).
+- Clip count: 6–10 clips per teaser sequence. Prefer material from the latter half (the viewer hasn't seen it yet).
 - Chronological order: Irrelevant. This is a trailer.
 
 ## Editorial Lens

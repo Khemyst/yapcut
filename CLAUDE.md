@@ -39,17 +39,35 @@ Even a 2-minute briefing dramatically improves marker quality versus zero-contex
 
 ## Operating Modes
 
-### Mode 1: Multicam / ISO (Default)
+### Mode 1: Markers (Default)
 
 The editor has multiple source files to sync in Premiere (VOD, cam ISOs, game capture, guest cams, Discord audio). YapCut outputs markers on the VOD timeline. The editor syncs ISOs in Premiere's multicam workflow, then uses markers to guide cutting decisions across all tracks.
 
 **Output:** `yapcut_markers.xml` — FCP XML with spanned marker track on VOD clipitem
 
-### Mode 2: Single Source (Opt-In)
+**Presets:** battlefield-campaign, battlefam, chill-stream
 
-Only one source file, no ISOs. The editor explicitly requests physical edit points: "Just give me a rough cut, no markers."
+### Mode 2: Rough Cut (Opt-In or Preset-Driven)
+
+Physical edit points on the timeline. Used when the editor explicitly requests it ("just give me a rough cut") OR when a preset declares `output_mode: cuts`.
 
 **Output:** `yapcut_roughcut.xml` — FCP XML with actual clip edits on timeline
+
+**Presets:** shorts, teaser
+
+### Mode 3: Shorts (Preset-Driven)
+
+Specialized rough-cut mode for short-form content. Claude finds every viable Short in the VOD (10-60 seconds each) and outputs them all as clips on a single timeline, separated by 2-second gaps. Each clip is named with a descriptive title. The editor scrubs through, picks favorites, and exports.
+
+**Output:** `yapcut_shorts.xml` — FCP XML with all Shorts as named clips on one sequence, separated by 2-second gaps
+
+**Clip naming:** Each clipitem gets a descriptive name — `"Morgan Freeman impression"`, `"Squad wipe no-scope reaction"`, etc.
+
+### Mode 4: Teaser (Preset-Driven)
+
+Specialized rough-cut mode for pre-roll intros. Claude selects the 6-10 best moments across the full VOD and assembles 2-3 complete teaser options as separate sequences in one XML file. Each teaser is 60-120 seconds, ready to drop at the start of the main edit.
+
+**Output:** `yapcut_teaser.xml` — FCP XML with 2-3 named sequences (`"Teaser A (hype)"`, `"Teaser B (comedy)"`, etc.)
 
 ## Marker Types
 
@@ -145,8 +163,9 @@ yapcut/presets/
 ### Preset Contents
 
 Each preset defines:
+- **Output mode** — `markers` (default) or `cuts` (physical edit points). Shorts and Teaser presets produce cuts.
 - **Target runtime** — approximate final length or compression ratio
-- **Marker density target** — markers per hour of source (calibrates Claude's "budget")
+- **Marker density target** — markers per hour of source (marker-mode presets only)
 - **Content priority stack** — ranked list of what to keep vs. cut
 - **Implicit CUT zones** — content types that should never be marked, just ignored
 - **Title/game-specific rules** — mechanics unique to the game being played

@@ -1,11 +1,21 @@
 # YAPCUT PRESET: Shorts
 
-*30–60 second vertical content for YouTube Shorts, TikTok, or Instagram Reels. Cut from raw VOD. Chronological order is optional. The only rule is: do not lose the viewer.*
+*10–60 second vertical content for YouTube Shorts, TikTok, or Instagram Reels. Cut from raw VOD. Chronological order is optional. The only rule is: do not lose the viewer.*
+
+## Output Mode: `cuts`
+
+This preset produces **physical edit points**, not markers. Claude finds every viable Short in the VOD and outputs them all as clips on a single timeline.
+
+### Output Format
+- **File:** `yapcut_shorts.xml`
+- **Structure:** One sequence. All Shorts as clipitems on a single timeline, separated by **2-second gaps** (60 frames at 30fps).
+- **Clip naming:** Each clipitem gets a descriptive title — `"Morgan Freeman impression"`, `"Squad wipe no-scope"`, `"Discord argument escalates"`, etc. The name should be what you'd title the Short.
+- **Volume:** Find everything. If a 2-hour stream yields 10 viable Shorts, output all 10. If it yields 3, output 3. Don't pad — but don't hold back.
+- **Gaps:** The 2-second gaps between clips let the editor see where one Short ends and the next begins when scrubbing the timeline. Gaps are empty (no content).
 
 ## Target Output
 - Format: Vertical (9:16), Platform-Agnostic
-- Duration: 30–60 seconds hard cap. 45 seconds is the sweet spot.
-- Marker Density Target: Flag aggressively — 25–35 MOMENT candidates per hour of source material. Most won't be used. Volume is the point.
+- Duration: **10–60 seconds**. 20-45 seconds is the sweet spot. A tight 12-second reaction arc is a valid Short.
 - Shot reordering: Permitted and encouraged when it creates a tighter narrative arc
 
 ## Editorial Lens
