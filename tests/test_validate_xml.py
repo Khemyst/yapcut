@@ -155,12 +155,26 @@ def test_marker_missing_in_out():
 
 
 def test_marker_invalid_prefix():
-    """A marker with an unrecognised prefix like [INVALID] should flag an issue."""
-    marker = _marker_xml("[INVALID] Weird tag")
+    """A marker without a proper [UPPERCASE] prefix should flag an issue."""
+    marker = _marker_xml("no brackets here")
     path = _write_temp_xml(_minimal_roughcut_xml(extra_video_clip_children=marker))
     issues = validate(path)
-    prefix_issues = [i for i in issues if "prefix" in i.lower() or "invalid" in i.lower()]
+    prefix_issues = [i for i in issues if "prefix" in i.lower()]
     assert len(prefix_issues) >= 1, f"Expected a prefix-related issue, got: {issues}"
+
+
+def test_custom_preset_markers_pass():
+    """Preset-defined marker types like [REACTION], [IMPRESSION], [TEASER] should validate."""
+    markers = "\n".join([
+        _marker_xml("[REACTION] First Murphy line"),
+        _marker_xml("[IMPRESSION] Morgan Freeman voice"),
+        _marker_xml("[TEASER] Cold open candidate"),
+        _marker_xml("[BIT_OPEN] Running joke starts"),
+        _marker_xml("[ANCHOR] Best exclusive moment"),
+    ])
+    path = _write_temp_xml(_minimal_roughcut_xml(extra_video_clip_children=markers))
+    issues = validate(path)
+    assert issues == [], f"Expected no issues for custom prefixes, got: {issues}"
 
 
 def test_marker_out_before_in():

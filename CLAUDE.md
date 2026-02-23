@@ -129,18 +129,18 @@ Markdown files encoding editorial style for specific content types. Loaded by na
 
 ```
 yapcut/presets/
-├── battlefield-highlights.md
-├── full-vod-edit.md
-├── shorts-extraction.md
-├── battlefam-episode.md
-└── chill-stream.md
+├── battlefield-campaign.md   # BF6 campaign — actor reacting to own performance
+├── battlefam.md              # Interview show — cast/crew conversations
+├── shorts.md                 # 30-60s vertical content extraction
+├── teaser.md                 # 60-120s pre-roll intro from best VOD moments
+└── chill-stream.md           # Comedy-first multiplayer with friends
 ```
 
 ### Usage
 
-"Load battlefield-highlights" during the briefing. Presets are starting points, not rigid rules. The briefing conversation overrides any preset default:
-- "Use full-vod but target 20 minutes instead of 30"
-- "Start with chill-stream but more aggressive cuts than usual"
+"Load battlefield-campaign" during the briefing. Presets are starting points, not rigid rules. The briefing conversation overrides any preset default:
+- "Use chill-stream but more aggressive cuts than usual"
+- "Load shorts but cap at 30 seconds instead of 60"
 
 ### Preset Contents
 
@@ -181,10 +181,10 @@ yapcut/
 ├── CLAUDE.md                    # This file — project knowledge base
 ├── EDITORIAL_MEMORY.md          # Evolving style memory (auto + manual)
 ├── presets/
-│   ├── battlefield-highlights.md
-│   ├── full-vod-edit.md
-│   ├── shorts-extraction.md
-│   ├── battlefam-episode.md
+│   ├── battlefield-campaign.md
+│   ├── battlefam.md
+│   ├── shorts.md
+│   ├── teaser.md
 │   └── chill-stream.md
 ├── tools/
 │   ├── validate_xml.py          # FCP XML validator

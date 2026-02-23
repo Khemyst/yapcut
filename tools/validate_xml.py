@@ -18,7 +18,9 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-VALID_MARKER_PREFIXES = {"[KEEP]", "[MAYBE]", "[CUT]", "[MOMENT]", "[CONTEXT]"}
+# Base marker types. Presets may define additional types (e.g. [REACTION],
+# [IMPRESSION], [TEASER]). The validator accepts any [UPPERCASE] prefix.
+BASE_MARKER_PREFIXES = {"[KEEP]", "[MAYBE]", "[CUT]", "[MOMENT]", "[CONTEXT]"}
 
 
 def validate(filepath: str) -> list[str]:
@@ -172,16 +174,12 @@ def _validate_markers(clip: ET.Element, prefix: str, issues: list[str]):
         else:
             name_text = name_el.text.strip()
             # Extract the bracketed prefix, e.g. "[KEEP]" from "[KEEP] Great moment"
-            match = re.match(r"(\[[A-Z]+\])", name_text)
+            # Accepts any [UPPERCASE_LETTERS] prefix (presets define custom types)
+            match = re.match(r"(\[[A-Z][A-Z_]*\])", name_text)
             if not match:
                 issues.append(
                     f"{m_prefix}: name '{name_text}' does not start with a "
-                    f"valid prefix — expected one of {sorted(VALID_MARKER_PREFIXES)}"
-                )
-            elif match.group(1) not in VALID_MARKER_PREFIXES:
-                issues.append(
-                    f"{m_prefix}: invalid prefix '{match.group(1)}' — "
-                    f"expected one of {sorted(VALID_MARKER_PREFIXES)}"
+                    f"valid [PREFIX] — expected format like [KEEP], [REACTION], etc."
                 )
 
         # Comment is required
