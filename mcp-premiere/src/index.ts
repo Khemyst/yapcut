@@ -62,15 +62,18 @@ server.tool(
   async () => handleTool("color_markers", {})
 );
 
-server.tool(
+// Use registerTool to declare the timebase parameter schema for MCP clients.
+// The deprecated tool() 4-arg overload triggers TS2589 (deep type instantiation)
+// with Zod schemas in MCP SDK v1.26, so registerTool is the correct API anyway.
+const razorInputSchema = { timebase: z.number().describe("Sequence frame rate timebase (default: 30 for 29.97fps)") };
+server.registerTool(
   "razor_at_boundaries",
-  "Razor-cut ALL tracks at every marker in/out boundary on V1 clip. Creates physical edit points at every marker start and end. Pass timebase as a number (default 30 for 29.97fps).",
-  async (extra) => {
-    // Extract timebase from the raw request params if provided
-    const params = (extra as Record<string, unknown>) ?? {};
-    const timebase = typeof params.timebase === "number" ? params.timebase : 30;
-    return handleTool("razor_at_boundaries", { timebase });
-  }
+  {
+    description: "Razor-cut ALL tracks at every marker in/out boundary on V1 clip. Creates physical edit points at every marker start and end.",
+    inputSchema: razorInputSchema,
+  },
+  // @ts-expect-error — TS2589 deep instantiation on ToolCallback<typeof razorInputSchema>
+  async (args: { timebase: number }) => handleTool("razor_at_boundaries", args)
 );
 
 server.tool(

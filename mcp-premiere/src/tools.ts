@@ -10,6 +10,9 @@ function makeGetSequenceInfoScript(): string {
   var seq = app.project.activeSequence;
   if (!seq) return JSON.stringify({ error: "No active sequence" });
 
+  var frTicks = parseFloat(seq.getSettings().videoFrameRate.ticks);
+  var fps = Math.round(254016000000 / frTicks * 100) / 100;
+
   var result = {
     name: seq.name,
     duration: seq.end,
@@ -17,7 +20,8 @@ function makeGetSequenceInfoScript(): string {
     audioTrackCount: seq.audioTracks.numTracks,
     frameSizeH: seq.frameSizeHorizontal,
     frameSizeV: seq.frameSizeVertical,
-    timebase: seq.getSettings().videoFrameRate.ticks
+    fps: fps,
+    timebaseTicks: seq.getSettings().videoFrameRate.ticks
   };
   return JSON.stringify(result);
 })()`;
