@@ -1,21 +1,32 @@
 # YAPCUT PRESET: Teaser
 
-*Placed at the beginning of the final video. The viewer has clicked but hasn't committed. This is the closer — 60–120 seconds of the best material from the entire VOD, structured to make leaving feel wrong.*
+*Placed at the beginning of the final video. The viewer has clicked but hasn't committed. This is the closer — structured to make leaving feel wrong.*
 
 ## Output Mode: `cuts`
 
-This preset produces **physical edit points**, not markers. Claude selects the best moments and assembles complete teaser sequences, ready to drop at the start of the main edit.
+This preset produces **physical edit points**, not markers. Claude selects the best moments and assembles complete teaser sequences.
 
-### Output Format
+### Integrated Mode (Default — Part of a YT Cut)
+
+When a teaser is generated as part of a YT Cut (Mode 2), it is placed at the top of the same sequence timeline:
+- **2-3 teaser options** separated by 2-second gaps, followed by the main edit
+- **15-30 seconds each** — matches YouTube's hover autoplay window (~30s)
+- **3-5 clips per teaser** at 0.3-0.5 seconds per shot — tight, fast montage
+- The editor picks their favorite, deletes the others
+
+### Standalone Mode (Separate Teaser-Only Output)
+
+When generating a standalone teaser for a long-form VOD edit (2+ hours):
 - **File:** `yapcut_teaser.xml`
-- **Structure:** 2-3 **separate sequences** in one XML file, each a complete teaser option. Premiere imports them all; the editor picks their favorite.
-- **Sequence naming:** `"Teaser A (hype)"`, `"Teaser B (comedy)"`, `"Teaser C (balanced)"` — or whatever tonal angles the VOD supports.
-- **Each sequence:** 6-10 clips assembled as a rough cut. 60-120 seconds total. 90 seconds is optimal. Clips are ordered for maximum impact, NOT chronologically.
+- **Structure:** 2-3 **separate sequences** in one XML file
+- **Sequence naming:** `"Teaser A (hype)"`, `"Teaser B (comedy)"`, `"Teaser C (balanced)"`
+- **Each sequence:** 6-10 clips, 60-120 seconds total. 90 seconds is optimal.
+- Use standalone mode only when explicitly requested or for VODs over 2 hours.
 
 ## Target Output
 - Format: Front-loaded video intro (horizontal, same project timeline)
-- Duration: 60–120 seconds. 90 seconds is optimal.
-- Clip count: 6–10 clips per teaser sequence. Prefer material from the latter half (the viewer hasn't seen it yet).
+- Duration: **15-30 seconds** (integrated) or **60-120 seconds** (standalone for long-form)
+- Clip count: 3-5 clips (integrated) or 6-10 clips (standalone). Prefer material from the latter half (the viewer hasn't seen it yet).
 - Chronological order: Irrelevant. This is a trailer.
 
 ## Editorial Lens
