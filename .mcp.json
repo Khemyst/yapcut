@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "premiere": {
+      "command": "node",
+      "args": ["C:/Users/jaywa.NEUTRON/Projects/yapcut/mcp-premiere/dist/index.js"]
+    }
+  }
+}

@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 .env
 .worktrees/
+mcp-premiere/node_modules/
+mcp-premiere/dist/

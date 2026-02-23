@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>YapCut Bridge</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1e1e1e;
+      color: #ccc;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 12px;
+      padding: 12px;
+      overflow: hidden;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #555;
+      flex-shrink: 0;
+    }
+    .status-dot.polling { background: #4caf50; }
+    .status-dot.stopped { background: #f44336; }
+    .status-dot.error { background: #ff9800; }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      color: #999;
+    }
+    .info-row .value { color: #ccc; }
+
+    .controls {
+      display: flex;
+      gap: 6px;
+      margin: 10px 0;
+    }
+    button {
+      background: #333;
+      color: #ccc;
+      border: 1px solid #555;
+      padding: 4px 12px;
+      cursor: pointer;
+      font-size: 11px;
+      border-radius: 3px;
+    }
+    button:hover { background: #444; }
+    button:disabled { opacity: 0.4; cursor: default; }
+    button.active { background: #2a6e2a; border-color: #4caf50; }
+
+    .log-area {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 3px;
+      padding: 6px;
+      height: calc(100vh - 160px);
+      overflow-y: auto;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 11px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .log-entry { color: #888; }
+    .log-entry.cmd { color: #6cb6ff; }
+    .log-entry.ok { color: #4caf50; }
+    .log-entry.err { color: #f44336; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="status-dot" id="statusDot"></div>
+    <h1>YapCut Bridge</h1>
+    <span id="statusText" style="color:#999; margin-left:auto; font-size:11px;">Stopped</span>
+  </div>
+
+  <div class="info-row">
+    <span>Bridge dir:</span>
+    <span class="value" id="bridgeDir">—</span>
+  </div>
+  <div class="info-row">
+    <span>Commands:</span>
+    <span class="value" id="cmdCount">0</span>
+  </div>
+  <div class="info-row">
+    <span>Errors:</span>
+    <span class="value" id="errCount">0</span>
+  </div>
+
+  <div class="controls">
+    <button id="btnStart" onclick="startPolling()">Start</button>
+    <button id="btnStop" onclick="stopPolling()" disabled>Stop</button>
+    <button onclick="clearLog()">Clear Log</button>
+  </div>
+
+  <div class="log-area" id="logArea"></div>
+
+  <script src="CSInterface.js"></script>
+  <script src="bridge-cep.js"></script>
+</body>
+</html>
