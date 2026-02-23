@@ -378,6 +378,16 @@ When `ntsc=TRUE` and `timebase=30`, the actual rate is 29.97fps but frame number
 - Flag disfluencies (`tags: ["disfluency"]`) but don't auto-remove — let the human decide
 - Presets extend these base guidelines with content-type-specific rules
 
+### Reaction Lead-In Rule
+
+When a strong vocal reaction follows a period of silence (5+ seconds of no speech), **extend the cut backwards into the silence** to capture the visual moment that caused the reaction. The transcript can't see gameplay — but silence → sudden reaction is a reliable signal that something happened on screen.
+
+- `"..."` (15s silence) → `"HOLY SHIT"` → extend clip start 10-15 seconds before the reaction
+- `"..."` (8s silence) → `"wait... oh my god"` → extend clip start to cover the full silence
+- The visual payoff happened *during* the silence. Cutting at the first word of the reaction loses the setup.
+- For Shorts/Teaser cuts: this is especially critical. A Short that opens on the reaction without the visual setup is half a clip.
+- For markers: extend the `<in>` frame backwards to include the lead-in silence.
+
 ## Generating a Marker Edit
 
 When the human asks for an edit:
