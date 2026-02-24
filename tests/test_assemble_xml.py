@@ -289,3 +289,25 @@ def test_get_safe_path_multiple_collisions(tmp_path):
     (tmp_path / "yapcut_test_v2.xml").touch()
     p = get_safe_path(tmp_path, "yapcut_test")
     assert p == tmp_path / "yapcut_test_v3.xml"
+
+
+# ---------------------------------------------------------------------------
+# Full pipeline integration test
+# ---------------------------------------------------------------------------
+
+
+def test_full_pipeline_outline_to_valid_xml():
+    """End-to-end: outline + transcript -> resolve -> assemble -> valid XML."""
+    from resolve_timestamps import resolve_outline
+    # Import the test fixtures from test_resolve_timestamps
+    from test_resolve_timestamps import TRANSCRIPT, OUTLINE_FIXTURE
+
+    segment_list = resolve_outline(OUTLINE_FIXTURE, TRANSCRIPT)
+    xml_str = assemble(segment_list)
+
+    with tempfile.NamedTemporaryFile(suffix=".xml", delete=False, mode="w", encoding="utf-8") as f:
+        f.write(xml_str)
+        f.flush()
+        issues = validate(f.name)
+
+    assert issues == [], f"Pipeline produced invalid XML: {issues}"
